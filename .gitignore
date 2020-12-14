@@ -191,6 +191,9 @@ install_manifest.txt
 *.o
 *.obj
 
+# We still want to include obj files in scene
+!scenes/*
+
 # Precompiled Headers
 *.gch
 *.pch

@@ -24,9 +24,9 @@ std::string currentTimeString() {
     return std::string(buf);
 }
 
-//-------------------------------
-//----------SETUP STUFF----------
-//-------------------------------
+  //-------------------------------
+  //----------SETUP STUFF----------
+  //-------------------------------
 
 void initTextures() {
     glGenTextures(1, &displayImage);
@@ -185,54 +185,57 @@ bool init() {
     return true;
 }
 
-static ImGuiWindowFlags windowFlags= ImGuiWindowFlags_None | ImGuiWindowFlags_NoMove;
+static ImGuiWindowFlags windowFlags = ImGuiWindowFlags_None | ImGuiWindowFlags_NoMove;
 static bool ui_hide = false;
 
 void drawGui(int windowWidth, int windowHeight) {
-    // Dear imgui new frame
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+  // Dear imgui new frame
+  glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
 
-    // Dear imgui define
-    ImVec2 minSize(300.f, 220.f);
-    ImVec2 maxSize((float)windowWidth * 0.5, (float)windowHeight * 0.3);
-    ImGui::SetNextWindowSizeConstraints(minSize, maxSize);
+  // Dear imgui define
+  ImVec2 minSize(300.f, 220.f);
+  ImVec2 maxSize((float)windowWidth * 0.5, (float)windowHeight * 0.3);
+  ImGui::SetNextWindowSizeConstraints(minSize, maxSize);
 
-    ImGui::SetNextWindowPos(ui_hide ? ImVec2(-1000.f, -1000.f) : ImVec2(0.0f, 0.0f));
+  ImGui::SetNextWindowPos(ui_hide ? ImVec2(-1000.f, -1000.f) : ImVec2(0.0f, 0.0f));
 
-    ImGui::Begin("Control Panel", 0, windowFlags);
-    ImGui::SetWindowFontScale(1);
+  ImGui::Begin("Control Panel", 0, windowFlags);
+  ImGui::SetWindowFontScale(1);
 
-    ImGui::Text("press H to hide GUI completely.");
-    if (ImGui::IsKeyPressed('H')) {
-        ui_hide = !ui_hide;
-    }
+  ImGui::Text("press H to hide GUI completely.");
+  if (ImGui::IsKeyPressed('H')) {
+    ui_hide = !ui_hide;
+  }
 
-    ImGui::SliderInt("Iterations", &ui_iterations, 1, startupIterations);
+  ImGui::SliderInt("Iterations", &ui_iterations, 1, startupIterations);
+  
+  ImGui::Checkbox("Denoise", &ui_denoise);
 
-    ImGui::Checkbox("Denoise", &ui_denoise);
+  ImGui::SliderInt("Filter Size", &ui_filterSize, 0, 128);
+  ImGui::SliderFloat("Color Weight", &ui_colorWeight, 0.0f, 5.f);
+  ImGui::SliderFloat("Normal Weight", &ui_normalWeight, 0.0f, 5.f);
+  ImGui::SliderFloat("Position Weight", &ui_positionWeight, 0.0f, 5.f);
 
-    ImGui::SliderInt("Filter Size", &ui_filterSize, 0, 100);
-    ImGui::SliderFloat("Color Weight", &ui_colorWeight, 0.0f, 10.0f);
-    ImGui::SliderFloat("Normal Weight", &ui_normalWeight, 0.0f, 10.0f);
-    ImGui::SliderFloat("Position Weight", &ui_positionWeight, 0.0f, 10.0f);
+  ImGui::Separator();
 
-    ImGui::Separator();
+  ImGui::Checkbox("Show GBuffer", &ui_showGbuffer);
+  ImGui::Checkbox("Show GBuffer Position", &ui_showGbufferPos);
+  ImGui::Checkbox("Show GBuffer Normal", &ui_showGbufferNor);
+  ImGui::Checkbox("Show GBuffer Color", &ui_showGbufferCol);
 
-    ImGui::Checkbox("Show GBuffer", &ui_showGbuffer);
+  ImGui::Separator();
 
-    ImGui::Separator();
+  if (ImGui::Button("Save image and exit")) {
+    ui_saveAndExit = true;
+  }
 
-    if (ImGui::Button("Save image and exit")) {
-        ui_saveAndExit = true;
-    }
+  ImGui::End();
 
-    ImGui::End();
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void mainLoop() {

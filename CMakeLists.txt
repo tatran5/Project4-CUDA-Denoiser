@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(cis565_denoiser)
+project(cis565_path_tracer)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -73,6 +73,7 @@ set(headers
     src/sceneStructs.h
     src/preview.h
     src/utilities.h
+    src/tiny_obj_loader.h
     )
 
 set(sources
@@ -101,6 +102,7 @@ set(imgui
     imgui/imgui_impl_opengl3.cpp
     imgui/imgui_impl_opengl3.h
     )
+
 
 list(SORT headers)
 list(SORT sources)
